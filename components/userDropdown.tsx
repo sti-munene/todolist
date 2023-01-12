@@ -28,7 +28,7 @@ export function UserDropdown({ toggler }: { toggler: () => void }) {
 
         <li>
           <button className={linkStyles} onClick={() => signOut()}>
-            Sing Out
+            Sign Out
           </button>
         </li>
       </ul>
