@@ -1,0 +1,19 @@
+version: "3.1"
+
+services:
+  db:
+    image: postgres:14.6-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: todos
+      POSTGRES_USER: postgres
+
+    ports:
+      - 5433:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
