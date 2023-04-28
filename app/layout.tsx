@@ -9,14 +9,9 @@ import "../styles/globals.css";
 import Providers from "./providers";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "../pages/api/auth/[...nextauth]";
-import localFont from "@next/font/local";
+import localFont from "next/font/local";
 
-// const surt = localFont({
-//   src: './fonts/Surt-Normal-Bold.woff2',
-//   variable: '--font-surt-bold',
-// })
-
-import { Covered_By_Your_Grace } from "@next/font/google";
+import { Covered_By_Your_Grace } from "next/font/google";
 
 const cbyg = Covered_By_Your_Grace({
   variable: "--stylistic-font",

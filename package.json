@@ -12,7 +12,6 @@
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^2.9.10",
     "@next-auth/prisma-adapter": "^1.0.5",
-    "@next/font": "^13.1.1",
     "@prisma/client": "^4.8.1",
     "@types/node": "18.11.18",
     "@types/react": "18.0.26",
