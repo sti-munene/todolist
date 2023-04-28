@@ -4,30 +4,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { Container } from "./utils";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { UserDropdown } from "./userDropdown";
-import { listenForOutsideClicks } from "../lib/click-outside";
+import { Button } from "./buttons";
 
 export function Navbar() {
   const router = useRouter();
   const { data, status } = useSession();
-
-  const userDropdownTogglerRef = useRef(null);
-  const [showUserDropdownList, setShowUserDropdownList] = useState(false);
-  const [userDropDownlistening, setUserDropDownListening] = useState(false);
-  const toggleUserDropdown = () =>
-    setShowUserDropdownList(!showUserDropdownList);
-
-  useEffect(() =>
-    listenForOutsideClicks(
-      userDropDownlistening,
-      setUserDropDownListening,
-      userDropdownTogglerRef,
-      setShowUserDropdownList
-    )
-  );
 
   return (
     <header className="">
@@ -45,29 +29,22 @@ export function Navbar() {
             )}
 
             {data?.user && (
-              <div className="relative">
-                <button
-                  ref={userDropdownTogglerRef}
-                  className={`cursor-pointer px-2 h-16`}
-                  onClick={() => toggleUserDropdown()}
-                >
-                  <Image
-                    src={data?.user?.image ? data?.user?.image : "/user/01.jpg"}
-                    height={45}
-                    width={45}
-                    alt="User profile photo."
-                    className="rounded-full"
-                  />
-                </button>
+              <div className="flex items-center gap-4">
+                <Button size="small" onClick={() => signOut()}>
+                  Sign Out
+                </Button>
 
-                {showUserDropdownList && (
-                  <UserDropdown toggler={toggleUserDropdown} />
-                )}
+                <Image
+                  src={data?.user?.image ? data?.user?.image : "/user/01.jpg"}
+                  height={45}
+                  width={45}
+                  alt="User profile photo."
+                  className="rounded-full"
+                />
               </div>
             )}
           </div>
         </div>
-        {/* <nav>{renderThemeChanger()}</nav> */}
       </Container>
     </header>
   );

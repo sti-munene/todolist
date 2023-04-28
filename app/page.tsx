@@ -1,15 +1,15 @@
 import { BsCalendarCheck, BsGithub } from "react-icons/bs";
-import Note from "../components/todoItem";
 import { use } from "react";
-import axios from "axios";
-import { unstable_getServerSession, User, Session } from "next-auth";
+import { getServerSession } from "next-auth";
 import { authOptions } from "../pages/api/auth/[...nextauth]";
 import prisma from "../lib/prisma";
 import TitleForm from "../components/forms/titleForm";
 import TodoItem from "../components/todoItem";
 import { TodoClient } from "../types";
 import { Button } from "../components/buttons";
-import { getProviders } from "next-auth/react";
+import { getProviders, signIn } from "next-auth/react";
+import { SignInForm } from "../components/forms/signInForm";
+import { redirect } from "next/navigation";
 
 type Todo = {
   id: string;
@@ -51,34 +51,20 @@ async function getTodos(user: any) {
   });
 
   const t = transformTodos(todos);
-  console.log(t);
   return t;
 }
 
-function HomePage() {
-  const session = use(unstable_getServerSession(authOptions));
-  const todos = use(getTodos(session?.user));
-  const providers = use(getProviders());
+export const metadata = {
+  title: "Todo List | Home",
+  description: "Todo List Home Page",
+};
+
+async function HomePage() {
+  const session = await getServerSession(authOptions);
+  const todos = await getTodos(session?.user);
 
   if (!session) {
-    return (
-      <div className="providers-wrapper w-full flex items-center justify-center">
-        <div className="flex flex-col items-center mx-auto w-fit py-8 px-4 rounded-lg border border-white border-opacity-5">
-          <div className="w-full flex items-center justify-center text-sm mb-4 px-4 py-1 rounded-md bg-blue-500 bg-opacity-10 text-blue-600">
-            <p>Login to Continue</p>
-          </div>
-
-          <Button provider={providers?.github}>
-            <span>Sign in with GitHub</span>
-            <BsGithub
-              style={{
-                fontSize: "16px",
-              }}
-            />
-          </Button>
-        </div>
-      </div>
-    );
+    redirect("/auth/signin");
   }
 
   return (

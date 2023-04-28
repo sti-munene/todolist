@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useMemo, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
-import { MdSaveAlt } from "react-icons/md";
+import { MdCalendarToday, MdSaveAlt } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import { HiMenuAlt4 } from "react-icons/hi";
 import { BiChevronUp, BiPencil } from "react-icons/bi";
@@ -17,22 +17,23 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { LoadingSpinner } from "./utils";
 import NotesSection from "./forms/notes";
-
-// type DpTypes = {
-//   value: any;
-//   onClick: () => void;
-// };
+import clsx from "clsx";
 
 const CustomDatePicker = forwardRef<HTMLButtonElement>((props: any, ref) => {
-  const { value, onClick } = props;
+  const { onClick } = props;
 
   return (
     <button
-      className="bg-white bg-opacity-5 rounded-md px-2 py-1 h-8 w-full flex items-center justify-start text-sm"
+      className="bg-white bg-opacity-5 rounded-md px-2 py-1 h-8 w-full flex items-center justify-start text-sm gap-2"
       onClick={onClick}
       ref={ref}
+      id="my-tooltip"
+      data-tooltip-id="todos"
+      data-tooltip-content="Set Due Date"
+      data-tooltip-place="top"
     >
-      {value}
+      <MdCalendarToday aria-hidden />
+      <span>Set Due Date</span>
     </button>
   );
 });
@@ -88,6 +89,10 @@ function TodoItem({ todo }: { todo: TodoClient }) {
       });
   });
 
+  const datePickerStyles = clsx(
+    dueDate ? "block my-2 h-12" : "block my-2 h-12"
+  );
+
   return (
     <div className="hover:shadow-md w-full bg-gray-800 py-2 pr-4 pl-4 rounded-md mb-4">
       <div
@@ -101,6 +106,10 @@ function TodoItem({ todo }: { todo: TodoClient }) {
         <button
           onClick={() => setExpanded(!expanded)}
           className="hover:bg-white hover:bg-opacity-5 rounded-md h-8 w-8 flex items-center justify-center"
+          id="my-tooltip"
+          data-tooltip-id="todos"
+          data-tooltip-content="Expand Todo"
+          data-tooltip-place="top"
         >
           <HiMenuAlt4 className="text-2xl" />
         </button>
@@ -110,17 +119,14 @@ function TodoItem({ todo }: { todo: TodoClient }) {
             isOn={complete}
             handleToggle={() => {
               setComplete(!complete);
-              console.log(!complete);
               axios
                 .patch(`/api/todos/${todo.id}`, {
                   complete: !complete,
                 })
                 .then((res) => {
-                  console.log(res);
                   router.refresh();
                 })
                 .catch((err) => {
-                  console.log(err);
                   router.refresh();
                 });
             }}
@@ -152,6 +158,10 @@ function TodoItem({ todo }: { todo: TodoClient }) {
         <button
           onClick={() => setExpanded(!expanded)}
           className="hover:bg-white hover:bg-opacity-5 rounded-md h-8 w-8 flex items-center justify-center"
+          id="my-tooltip"
+          data-tooltip-id="todos"
+          data-tooltip-content="Expand Todo"
+          data-tooltip-place="top"
         >
           <BiChevronUp
             className={expanded ? "rotate-180 text-2xl" : "text-2xl"}
@@ -163,13 +173,17 @@ function TodoItem({ todo }: { todo: TodoClient }) {
         className={expanded ? "block " + noteStyles : "hidden " + noteStyles}
       >
         <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
-          {/*  */}
-
           <NotesSection todo={todo} expanded={expanded} />
 
           <div>
-            <div>
-              <h3 className="stylistic-font text-xl">Due Date</h3>
+            <div className="flex items-center gap-1">
+              {dueDate ? (
+                <h3 className="stylistic-font text-xl">
+                  Due Date: {dueDate?.toDateString()}
+                </h3>
+              ) : (
+                <h3 className="stylistic-font text-xl">Due Date</h3>
+              )}
             </div>
 
             <div
@@ -179,33 +193,29 @@ function TodoItem({ todo }: { todo: TodoClient }) {
                   : "rounded-md my-2 flex items-center gap-2 bg-red-500 bg-opacity-20 px-2 py-2"
               }`}
             >
-              <RiAlarmWarningFill className="text-red-400" />
+              <RiAlarmWarningFill aria-hidden className="text-red-400" />
               <p className="text-sm text-red-400">No due date set.</p>
             </div>
 
-            <div className="my-2 h-12">
+            <div className={datePickerStyles}>
               <DatePicker
                 selected={dueDate}
                 onChange={(date: Date) => {
                   setDueDate(date);
-                  console.log(date);
-
                   axios
                     .patch(`/api/todos/${todo.id}`, {
                       dueDate: date,
                     })
                     .then((res) => {
-                      console.log(res);
                       router.refresh();
                     })
                     .catch((err) => {
-                      console.log(err);
                       router.refresh();
                     });
                 }}
                 customInput={<CustomDatePicker />}
                 isClearable
-                placeholderText="I have been cleared!"
+                placeholderText="Pick Due Date"
                 clearButtonClassName="rounded-tr-md rounded-br-md h-8 w-8 flex items-center hover:bg-white hover:bg-opacity-5"
               />
             </div>
@@ -217,28 +227,18 @@ function TodoItem({ todo }: { todo: TodoClient }) {
                   axios
                     .delete(`/api/todos/${todo.id}`)
                     .then((res) => {
-                      console.log(res);
                       setDeleteLoading(false);
-
                       router.refresh();
                     })
                     .catch((err) => {
                       setDeleteLoading(false);
-
-                      console.log(err);
                       router.refresh();
                     });
                 }}
                 className="text-sm rounded-md px-4 py-1 h-8 flex gap-1 items-center justify-center bg-red-500 hover:bg-red-400"
+                disabled={deleteLoading}
               >
-                {deleteLoading ? (
-                  <>
-                    <span>Processing...</span>
-                    <LoadingSpinner />
-                  </>
-                ) : (
-                  "Delete Todo"
-                )}
+                {deleteLoading ? "Processing..." : "Delete Todo"}
               </button>
             </div>
           </div>
@@ -263,8 +263,11 @@ const Switch = ({
         checked={isOn}
         onChange={handleToggle}
         className="h-full w-full"
-        id={`complete`}
         type="checkbox"
+        id="my-tooltip"
+        data-tooltip-id="todos"
+        data-tooltip-content="Mark Todo as Complete"
+        data-tooltip-place="top"
       />
     </>
   );

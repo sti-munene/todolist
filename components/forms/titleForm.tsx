@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "../utils";
+import clsx from "clsx";
+import { Tooltip } from "react-tooltip";
 
 const schema = yup.object().shape({
   title: yup.string().required(),
@@ -32,7 +34,6 @@ function TitleForm() {
 
   const onSubmit = handleSubmit((data) => {
     setFormLoading(true);
-    console.log(data);
 
     axios
       .post("/api/todos/title", data)
@@ -42,15 +43,17 @@ function TitleForm() {
         });
         setFormLoading(false);
         router.refresh();
-        console.log(response);
       })
       .catch((response) => {
         setFormLoading(false);
         router.refresh();
-
-        console.log(response);
       });
   });
+
+  const btnStyles = clsx(
+    "hover:bg-white hover:bg-opacity-5 rounded-md h-8 w-8 flex items-center justify-center",
+    formLoading && "bg-white bg-opacity-5"
+  );
 
   return (
     <div className="w-full bg-gray-800 py-2 pr-4 pl-4 rounded-md mb-4">
@@ -71,11 +74,18 @@ function TitleForm() {
               name="title"
               defaultValue=""
             />
-            <button className="hover:bg-white hover:bg-opacity-5 rounded-md h-8 w-8 flex items-center justify-center">
+            <button
+              id="my-tooltip"
+              data-tooltip-id="todos"
+              data-tooltip-content="Add Todo"
+              data-tooltip-place="top"
+              className={btnStyles}
+              disabled={formLoading}
+            >
               {formLoading ? (
                 <LoadingSpinner />
               ) : (
-                <IoMdAdd className="text-2xl" />
+                <IoMdAdd aria-hidden className="text-2xl" />
               )}
             </button>
           </form>

@@ -39,7 +39,6 @@ function NotesSection({
 
   const onSubmit = handleSubmit((data) => {
     setFormLoading(true);
-    console.log(data);
 
     axios
       .patch(`/api/todos/${todo.id}`, data)
@@ -51,7 +50,6 @@ function NotesSection({
       .catch((response) => {
         setFormLoading(false);
         router.refresh();
-        console.log(response);
       });
   });
 
@@ -69,11 +67,21 @@ function NotesSection({
               <button
                 type="submit"
                 className="h-8 w-8 flex items-center justify-center hover:bg-white hover:bg-opacity-5 rounded-md"
+                id="my-tooltip"
+                data-tooltip-id="todos"
+                data-tooltip-content="Save Todo Notes"
+                data-tooltip-place="top"
               >
-                <MdSaveAlt />
+                <MdSaveAlt aria-hidden />
               </button>
-              <button className="h-8 w-8 flex items-center justify-center hover:bg-white hover:bg-opacity-5 rounded-md">
-                <IoMdClose />
+              <button
+                id="my-tooltip"
+                data-tooltip-id="todos"
+                data-tooltip-content="Delete Todo Notes"
+                data-tooltip-place="top"
+                className="h-8 w-8 flex items-center justify-center hover:bg-white hover:bg-opacity-5 rounded-md"
+              >
+                <IoMdClose aria-hidden />
               </button>
             </div>
           </div>
@@ -92,7 +100,7 @@ function NotesSection({
               border border-white border-opacity-5 text-current text-sm 
               rounded-md block w-full px-2 focus:bg-white focus:bg-opacity-10"
                 name="notes"
-                placeholder="todo notes here..."
+                placeholder="Todo notes here..."
               ></textarea>
             </div>
           </div>
