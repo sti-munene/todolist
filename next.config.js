@@ -12,12 +12,14 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
-
-  fontLoaders: [
-    { loader: "@next/font/google", options: { subsets: ["latin"] } },
-  ],
 };
 
 module.exports = nextConfig;
