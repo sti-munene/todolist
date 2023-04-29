@@ -38,6 +38,8 @@ const CustomDatePicker = forwardRef<HTMLButtonElement>((props: any, ref) => {
   );
 });
 
+CustomDatePicker.displayName = "CustomDatePicker";
+
 type TitleFormFields = {
   title: string;
 };
