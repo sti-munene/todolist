@@ -10,7 +10,6 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "../utils";
 import clsx from "clsx";
-import { Tooltip } from "react-tooltip";
 
 const schema = yup.object().shape({
   title: yup.string().required(),
@@ -57,39 +56,39 @@ function TitleForm() {
 
   return (
     <div className="w-full bg-gray-800 py-2 pr-4 pl-4 rounded-md mb-4">
-      <div>
-        <div className="w-full">
-          <form
-            style={{
-              gridTemplateColumns: "1fr 24px",
-            }}
-            className={`w-full grid items-center justify-items-center gap-2`}
-            onSubmit={onSubmit}
-            autoComplete="off"
+      <div className="w-full">
+        <form
+          style={{
+            gridTemplateColumns: "1fr 24px",
+          }}
+          className={`w-full grid items-center justify-items-center gap-2`}
+          onSubmit={onSubmit}
+          autoComplete="off"
+        >
+          <input
+            {...register("title")}
+            className="text-sm w-full bg-white bg-opacity-5 outline-none rounded-md px-2 py-1"
+            type="text"
+            name="title"
+            defaultValue=""
+          />
+
+          <button
+            type="submit"
+            id="my-tooltip"
+            data-tooltip-id="todos"
+            data-tooltip-content="Add Todo"
+            data-tooltip-place="top"
+            className={btnStyles}
+            disabled={formLoading}
           >
-            <input
-              {...register("title")}
-              className="text-sm w-full bg-white bg-opacity-5 outline-none rounded-md px-2 py-1"
-              type="text"
-              name="title"
-              defaultValue=""
-            />
-            <button
-              id="my-tooltip"
-              data-tooltip-id="todos"
-              data-tooltip-content="Add Todo"
-              data-tooltip-place="top"
-              className={btnStyles}
-              disabled={formLoading}
-            >
-              {formLoading ? (
-                <LoadingSpinner />
-              ) : (
-                <IoMdAdd aria-hidden className="text-2xl" />
-              )}
-            </button>
-          </form>
-        </div>
+            {formLoading ? (
+              <LoadingSpinner />
+            ) : (
+              <IoMdAdd aria-hidden className="text-2xl" />
+            )}
+          </button>
+        </form>
       </div>
     </div>
   );

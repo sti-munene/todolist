@@ -45,7 +45,6 @@ function NotesSection({
       .then((response) => {
         setFormLoading(false);
         router.refresh();
-        console.log(response);
       })
       .catch((response) => {
         setFormLoading(false);

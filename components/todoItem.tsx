@@ -144,13 +144,13 @@ function TodoItem({ todo }: { todo: TodoClient }) {
                 className="text-sm w-full bg-white bg-opacity-5 outline-none rounded-md px-2 py-1"
                 type="text"
                 defaultValue={todo.title || ""}
-                placeholder="I want to ..."
+                placeholder="I want to..."
               />
               <input type="submit" hidden />
             </div>
 
             {formLoading && (
-              <div className="absolute right-4 top-0">
+              <div className="absolute right-4 top-[14px]">
                 <LoadingSpinner />
               </div>
             )}
