@@ -2,7 +2,7 @@
 
 import { getProviders, signIn } from "next-auth/react";
 import { use } from "react";
-import { BsGithub } from "react-icons/bs";
+import { BsGithub, BsGoogle } from "react-icons/bs";
 import { Button } from "../buttons";
 
 export function SignInForm() {
@@ -25,12 +25,21 @@ export function SignInForm() {
                   })
                 }
                 key={provider.name}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 mb-2"
               >
                 <span>Sign in with {provider.name}</span>
 
                 {provider.name === "GitHub" && (
                   <BsGithub
+                    aria-hidden
+                    style={{
+                      fontSize: "16px",
+                    }}
+                  />
+                )}
+
+                {provider.name === "Google" && (
+                  <BsGoogle
                     aria-hidden
                     style={{
                       fontSize: "16px",

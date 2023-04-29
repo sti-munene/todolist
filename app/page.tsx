@@ -57,6 +57,10 @@ async function getTodos(user: any) {
 export const metadata = {
   title: "Todo List | Home",
   description: "Todo List Home Page",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 async function HomePage() {
